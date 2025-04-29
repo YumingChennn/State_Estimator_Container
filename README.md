@@ -31,5 +31,5 @@ and outputs:
 ## 🚀 How to Run
 
 ```bash
-python test_orientation_estimator.py
-python test_posvel_estimator.py
+python test_orientation_estimator.py config/reddog_him.yaml
+python test_posvel_estimator.py config/reddog_him.yaml
