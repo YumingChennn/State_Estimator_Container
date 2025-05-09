@@ -1,5 +1,6 @@
 from ..base import GenericEstimator
 import numpy as np
+import time
 
 class LinearKFPositionVelocityEstimator(GenericEstimator):
     def __init__(self):
@@ -98,6 +99,7 @@ class LinearKFPositionVelocityEstimator(GenericEstimator):
         return _xhat , _P, yModel, ey, adjust
 
     def run(self):
+        # start_time = time.time()
         params = self._data.parameters
         result = self._data.result
 
@@ -146,15 +148,17 @@ class LinearKFPositionVelocityEstimator(GenericEstimator):
 
             # Local position and velocity
             # p_f = Rbod @ p_rel
-            p_f = Rbod @ (p_rel - body_pos)
+            # p_f = Rbod @ (p_rel - body_pos)
+            p_f = Rbod @ p_rel
             # temp = np.cross(omegaBody, p_rel) + dp_rel
             # dp_f = Rbod @ temp
-            dp_f = Rbod @ (dp_rel - body_vel - np.cross(omegaBody, p_rel - body_pos))
+            # dp_f = Rbod @ (dp_rel - body_vel - np.cross(omegaBody, p_rel - body_pos))
+            dp_f = Rbod @ dp_rel
 
             # print related information
-            print(f"[DEBUG Leg {i}] body pos : {body_pos}")
-            print(f"[DEBUG Leg {i}] p_rel (foot pos in body frame): {p_rel}")
-            print(f"[DEBUG Leg {i}] p_f (foot pos in body frame): {p_f}")
+            # print(f"[DEBUG Leg {i}] body pos : {body_pos}")
+            # print(f"[DEBUG Leg {i}] p_rel (foot pos in world frame): {p_rel}")
+            # print(f"[DEBUG Leg {i}] p_f (foot pos in body frame): {p_f}")
             # print(f"[DEBUG Leg {i}] dp_f (foot vel in body frame): {dp_f}")
             # print("result.contact_estimate[i]",result.contact_estimate[i])
             
@@ -196,3 +200,5 @@ class LinearKFPositionVelocityEstimator(GenericEstimator):
         result.position = self._xhat[0:3]
         result.vWorld = self._xhat[3:6]
         result.vBody = result.rBody @ result.vWorld
+        # End_time = time.time()
+        # print(f"Linear KF Run time {End_time - start_time}")

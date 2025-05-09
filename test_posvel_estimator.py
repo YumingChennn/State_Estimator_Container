@@ -8,6 +8,8 @@ import numpy as np
 import torch
 import matplotlib.pyplot as plt
 
+import pinocchio
+
 from state_estimator.data_types import StateEstimate
 from state_estimator.container import StateEstimatorContainer
 from state_estimator.estimators.contact import ContactEstimator
@@ -158,6 +160,7 @@ def plot_simulation_results(position_data_list, cheater_position_list, kf_positi
 
 # === Main Simulation Runner ===
 def run_simulation(m, d, container_cheater, container_kf, policy, config):
+    # get the parameter from config
     xml_path = config["xml_path"]
     simulation_duration = config["simulation_duration"]
     simulation_dt = config["simulation_dt"]
